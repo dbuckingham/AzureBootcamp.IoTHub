@@ -1,0 +1,236 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Shortcut/@EntryValue">iotHubReceiveDeviceToCloudMessages</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=048324EE2989E140BFD884C42899802B/Text/@EntryValue">		private static string _connectionString = "{connection string}";&#xD;
+        private static string _endpoint = "messages/events";&#xD;
+        private static EventHubClient _eventHubClient;&#xD;
+&#xD;
+        static void Main(string[] args)&#xD;
+        {&#xD;
+            Console.WriteLine("Receiving messages...");&#xD;
+&#xD;
+            _eventHubClient = EventHubClient.CreateFromConnectionString(_connectionString, _endpoint);&#xD;
+&#xD;
+            var partitions = _eventHubClient.GetRuntimeInformation().PartitionIds;&#xD;
+            foreach (var partition in partitions)&#xD;
+            {&#xD;
+                ReceiveMessagesFromDeviceAsync(partition);&#xD;
+            }&#xD;
+&#xD;
+            Console.ReadLine();&#xD;
+        }&#xD;
+&#xD;
+        private async static Task ReceiveMessagesFromDeviceAsync(string partition)&#xD;
+        {&#xD;
+            var eventHubReceiver = _eventHubClient.GetDefaultConsumerGroup().CreateReceiver(partition, DateTime.Now);&#xD;
+&#xD;
+            while (true)&#xD;
+            {&#xD;
+                EventData eventdata = await eventHubReceiver.ReceiveAsync();&#xD;
+                if(eventdata == null) continue;&#xD;
+&#xD;
+                string data = Encoding.UTF8.GetString(eventdata.GetBytes());&#xD;
+                Console.WriteLine($"{DateTime.Now.ToString("h:mm:ss tt")}&gt; Received: {data}");&#xD;
+            }&#xD;
+        }</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Shortcut/@EntryValue">iotHubSendCloudToDeviceMessage</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Text/@EntryValue">		private static ServiceClient _serviceClient;&#xD;
+        private static string _connectionString = "{connection string}";&#xD;
+&#xD;
+        static void Main(string[] args)&#xD;
+        {&#xD;
+            Console.WriteLine("Sending Cloud-to-Device messages.");&#xD;
+&#xD;
+            _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);&#xD;
+&#xD;
+            Console.WriteLine("Press ENTER to send a cloud to device message.");&#xD;
+            while (true)&#xD;
+            {&#xD;
+                Console.ReadLine();&#xD;
+                SendCloudToDeviceMessage();&#xD;
+            }&#xD;
+        }&#xD;
+&#xD;
+        private static async Task SendCloudToDeviceMessage()&#xD;
+        {&#xD;
+            var message = new Message(Encoding.ASCII.GetBytes("Cloud to device message."));&#xD;
+            await _serviceClient.SendAsync("MyFirstDevice", message);&#xD;
+        }</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Shortcut/@EntryValue">iotHubDeviceIdentityMenu</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Text/@EntryValue">		private static Microsoft.Azure.Devices.RegistryManager _registryManager;&#xD;
+        private static string _connectionString = "{connectionString}";&#xD;
+&#xD;
+        static void Main(string[] args)&#xD;
+        {&#xD;
+            _registryManager = RegistryManager.CreateFromConnectionString(_connectionString);&#xD;
+&#xD;
+			#region Menu&#xD;
+&#xD;
+			bool exit = false;&#xD;
+            while (!exit)&#xD;
+            {&#xD;
+                Console.WriteLine("(A)dd a device.");&#xD;
+                //Console.WriteLine("(L)ist devices.");&#xD;
+                //Console.WriteLine("(R)emove a device.");&#xD;
+                Console.WriteLine("E(x)it.");&#xD;
+                Console.Write("Select an option: ");&#xD;
+&#xD;
+                var choice = Console.ReadLine();&#xD;
+                Console.WriteLine();&#xD;
+&#xD;
+                string deviceId;&#xD;
+                switch (choice)&#xD;
+                {&#xD;
+                    case "A":&#xD;
+					case "a":&#xD;
+                        //deviceId = PromptForDeviceId();&#xD;
+                        //AddDeviceAsync(deviceId).Wait();&#xD;
+                        break;&#xD;
+&#xD;
+                    case "L":&#xD;
+					case "l":&#xD;
+                        //ViewDevicesAsync().Wait();&#xD;
+                        break;&#xD;
+&#xD;
+                    case "R":&#xD;
+					case "r":&#xD;
+                        //deviceId = PromptForDeviceId();&#xD;
+                        //RemoveDeviceAsync(deviceId).Wait();&#xD;
+                        break;&#xD;
+&#xD;
+                    case "X":&#xD;
+                    case "x":&#xD;
+                        exit = true;&#xD;
+                        break;&#xD;
+&#xD;
+                    default:&#xD;
+                        break;&#xD;
+                }&#xD;
+            }&#xD;
+&#xD;
+			#endregion&#xD;
+        }&#xD;
+&#xD;
+		#region Menu Methods&#xD;
+&#xD;
+        private static string PromptForDeviceId()&#xD;
+        {&#xD;
+            Console.Write("Device Id: ");&#xD;
+            return Console.ReadLine();&#xD;
+        }&#xD;
+&#xD;
+        private static void PromptToReturnToMenu()&#xD;
+        {&#xD;
+            Console.Write("\nPress any key to return to the menu...");&#xD;
+            Console.ReadKey();&#xD;
+            Console.WriteLine();&#xD;
+        }&#xD;
+&#xD;
+		#endregion</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Shortcut/@EntryValue">iotHubSimulatedDevice</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=FC709F3F12C69B49ABD9F9281A52ED72/Text/@EntryValue">		private static Microsoft.Azure.Devices.Client.DeviceClient _deviceClient;&#xD;
+        private static string _iotHubHostName = "{iothub hostname}";&#xD;
+        private static string _deviceKey = "{device key}";&#xD;
+        private static string _deviceId = "{device id}";&#xD;
+&#xD;
+        static void Main(string[] args)&#xD;
+        {&#xD;
+            Console.WriteLine("Simulated device\n");&#xD;
+&#xD;
+            _deviceClient = DeviceClient.Create(_iotHubHostName, new DeviceAuthenticationWithRegistrySymmetricKey(_deviceId, _deviceKey));&#xD;
+&#xD;
+            SendDeviceToCloudMessagesAsync();&#xD;
+            ReceiveCloudToDeviceMessagesAsync();&#xD;
+&#xD;
+            Console.ReadLine();&#xD;
+        }&#xD;
+&#xD;
+        private static async void SendDeviceToCloudMessagesAsync()&#xD;
+        {&#xD;
+            while (true)&#xD;
+            {&#xD;
+                var messageString = BuildMessage();&#xD;
+                var message = new Message(Encoding.ASCII.GetBytes(messageString));&#xD;
+&#xD;
+                await _deviceClient.SendEventAsync(message);&#xD;
+                Console.WriteLine($"{DateTime.Now} &gt; Sending message: {messageString}");&#xD;
+&#xD;
+                Thread.Sleep(1000);&#xD;
+            }&#xD;
+        }&#xD;
+&#xD;
+        #region Message Methods&#xD;
+&#xD;
+        private static string BuildMessage()&#xD;
+        {&#xD;
+            double avgTemperature = 225;&#xD;
+            double variance = 5;&#xD;
+&#xD;
+            double currentTemperature = GetRandomTemperature(&#xD;
+                avgTemperature - variance,&#xD;
+                avgTemperature + variance);&#xD;
+&#xD;
+            var deviceToCloudMessage = new&#xD;
+            {&#xD;
+                deviceId = _deviceId,&#xD;
+                temperature = Math.Round(currentTemperature, 2)&#xD;
+            };&#xD;
+            var messageString = JsonConvert.SerializeObject(deviceToCloudMessage);&#xD;
+&#xD;
+            return messageString;&#xD;
+        }&#xD;
+&#xD;
+        private static double GetRandomTemperature(double min, double max)&#xD;
+        {&#xD;
+            Random rand = new Random();&#xD;
+            return rand.NextDouble()*(max - min) + min;&#xD;
+        }&#xD;
+&#xD;
+        #endregion&#xD;
+&#xD;
+        #region Cloud-to-Device Messages&#xD;
+&#xD;
+        private static async void ReceiveCloudToDeviceMessagesAsync()&#xD;
+        {&#xD;
+            Console.WriteLine("\nReceiving cloud to device messages from service");&#xD;
+            while (true)&#xD;
+            {&#xD;
+                Message receivedMessage = await _deviceClient.ReceiveAsync();&#xD;
+                if (receivedMessage == null) continue;&#xD;
+&#xD;
+                Console.ForegroundColor = ConsoleColor.Yellow;&#xD;
+                Console.WriteLine("Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));&#xD;
+                Console.ResetColor();&#xD;
+&#xD;
+                await _deviceClient.CompleteAsync(receivedMessage);&#xD;
+            }&#xD;
+        }&#xD;
+&#xD;
+        #endregion</s:String></wpf:ResourceDictionary>
