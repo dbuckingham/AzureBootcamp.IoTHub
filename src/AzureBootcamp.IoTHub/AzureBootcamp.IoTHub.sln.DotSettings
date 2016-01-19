@@ -49,6 +49,7 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0D66194BACCF0F4A805F6F11C9B5FA4B/Text/@EntryValue">		private static ServiceClient _serviceClient;&#xD;
         private static string _connectionString = "{connection string}";&#xD;
+		private static string _deviceId = "{device id}";&#xD;
 &#xD;
         static void Main(string[] args)&#xD;
         {&#xD;
@@ -60,14 +61,14 @@
             while (true)&#xD;
             {&#xD;
                 Console.ReadLine();&#xD;
-                SendCloudToDeviceMessage();&#xD;
+                SendCloudToDeviceMessage(_deviceId);&#xD;
             }&#xD;
         }&#xD;
 &#xD;
-        private static async Task SendCloudToDeviceMessage()&#xD;
+        private static async Task SendCloudToDeviceMessage(string deviceId)&#xD;
         {&#xD;
-            var message = new Message(Encoding.ASCII.GetBytes("Cloud to device message."));&#xD;
-            await _serviceClient.SendAsync("MyFirstDevice", message);&#xD;
+            var m = new Message(Encoding.ASCII.GetBytes("Cloud to device message."));&#xD;
+            await _serviceClient.SendAsync(deviceId, m);&#xD;
         }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=24678A71840F0E48883A1EAD9EE29FFF/Shortcut/@EntryValue">iotHubDeviceIdentityMenu</s:String>
